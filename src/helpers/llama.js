@@ -51,6 +51,11 @@ function startLlama(cfg) {
     console.log("[llama] Overriding model context metadata to:", cfg.context);
   }
   
+  // Enable prompt caching with larger limit for better cache hits
+  // Default is 8GB, but we can increase it if needed
+  args.push("--cache-ram", "16384"); // 16GB cache (more = better hit rate)
+  console.log("[llama] Prompt cache size:", "16GB");
+  
   // Add mmproj for vision models (use cached file path)
   if (cfg.mmproj) {
     const cacheDir = getLlamaCache();
@@ -122,6 +127,12 @@ function startLlama(cfg) {
       args.push("--cont-batching");
       console.log("[llama] Continuous batching enabled");
     }
+    
+    // Cache reuse via KV shifting: helps when OpenClaw sends growing conversation history
+    // Minimum chunk size to attempt reusing from cache (default: 0 = disabled)
+    // Setting to 2048 means: reuse cache if at least 2048 tokens match from prefix
+    args.push("--cache-reuse", "2048");
+    console.log("[llama] Cache reuse enabled (min chunk: 2048 tokens)");
     
     // KV cache type for keys (f16 saves memory vs f32)
     if (perf.cacheTypeK) {

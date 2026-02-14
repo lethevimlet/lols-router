@@ -1,0 +1,107 @@
+{
+  "router": {
+    "model": "qwen2.5-0.5b-instruct",
+    "port": 3001,
+    "context": 32768,
+    "systemPromptPath": "prompts/router-classifier.md"
+  },
+  "lols-smart": {
+    "default": {
+      "model": "hermes-3-llama-3.1-8b",
+      "systemPromptPath": "prompts/general-assistant.md"
+    },
+    "reason": {
+      "model": "hermes-3-llama-3.1-8b",
+      "systemPromptPath": "prompts/deep-thinker.md"
+    },
+    "chat": {
+      "model": "hermes-3-llama-3.1-8b",
+      "systemPromptPath": "prompts/chat-assistant.md"
+    },
+    "code": {
+      "model": "hermes-3-llama-3.1-8b",
+      "systemPromptPath": "prompts/coding-expert.md"
+    },
+    "vision": {
+      "model": "minicpm-v-2.6",
+      "systemPromptPath": "prompts/vision-expert.md"
+    }
+  },
+  "models": {
+    "qwen2.5-0.5b-instruct": {
+      "type": "llama-cpp",
+      "repo": "bartowski/Qwen2.5-0.5B-Instruct-GGUF",
+      "file": "Qwen2.5-0.5B-Instruct-Q4_K_M.gguf",
+      "context": 32768,
+      "port": 8025
+    },
+    "hermes-3-llama-3.1-8b": {
+      "type": "llama-cpp",
+      "repo": "bartowski/Hermes-3-Llama-3.1-8B-GGUF",
+      "file": "Hermes-3-Llama-3.1-8B-Q4_K_M.gguf",
+      "context": 32768,
+      "port": 8029,
+      "timeout": 300,
+      "maxTokens": 8192,
+      "performance": {
+        "flashAttention": true,
+        "batch": 4096,
+        "ubatch": 1024,
+        "threads": 12,
+        "parallel": 1,
+        "contBatching": true,
+        "cacheTypeK": "q4_0",
+        "cacheTypeV": "q4_0"
+      }
+    },
+    "qwen2.5-coder-14b-instruct": {
+      "type": "llama-cpp",
+      "repo": "bartowski/Qwen2.5-Coder-14B-Instruct-GGUF",
+      "file": "Qwen2.5-Coder-14B-Instruct-Q4_K_M.gguf",
+      "context": 131072,
+      "port": 8026,
+      "timeout": 300,
+      "maxTokens": 16384,
+      "performance": {
+        "flashAttention": true,
+        "batch": 8192,
+        "ubatch": 2048,
+        "threads": 12,
+        "parallel": 1,
+        "contBatching": true,
+        "cacheTypeK": "q4_0",
+        "cacheTypeV": "q4_0"
+      }
+    },
+    "minicpm-v-2.6": {
+      "type": "llama-cpp",
+      "repo": "openbmb/MiniCPM-V-2_6-gguf",
+      "file": "ggml-model-Q4_K_M.gguf",
+      "mmproj": "mmproj-model-f16.gguf",
+      "context": 8192,
+      "port": 8024,
+      "supportsVision": true
+    },
+    "whisper-small": {
+      "type": "whisper-cpp",
+      "repo": "ggerganov/whisper.cpp",
+      "file": "ggml-small.bin",
+      "port": 8030,
+      "language": "auto"
+    },
+    "whisper-base": {
+      "type": "whisper-cpp",
+      "repo": "ggerganov/whisper.cpp",
+      "file": "ggml-base.bin",
+      "port": 8031,
+      "language": "auto"
+    },
+    "whisper-medium": {
+      "type": "whisper-cpp",
+      "repo": "ggerganov/whisper.cpp",
+      "file": "ggml-medium.bin",
+      "port": 8032,
+      "language": "auto"
+    }
+  }
+}

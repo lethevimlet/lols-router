@@ -1,0 +1,42 @@
+{
+  "name": "lols-router",
+  "version": "0.1.0",
+  "private": true,
+  "type": "commonjs",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon --watch src --ext js,json --signal SIGTERM src/server.js",
+    "test": "node test/simple-test.js",
+    "test:integration": "node test/integration-test.js",
+    "test:stt": "node test/stt-integration-test.js",
+    "test:vision": "node test/vision-integration-test.js",
+    "test:gpu-config": "node test/gpu-config-test.js",
+    "test:ws": "node test/ws-logs-test.js",
+    "test:system-prompt": "node test/system-prompt-priority-test.js",
+    "test:all": "npm test && npm run test:integration && npm run test:stt && npm run test:vision && npm run test:gpu-config",
+    "deploy": "node scripts/remote-helper.js deploy",
+    "test:remote": "node scripts/remote-helper.js test-remote",
+    "test:remote:quick": "node scripts/remote-helper.js test-integration",
+    "pm2:setup": "node scripts/remote-helper.js pm2-setup",
+    "pm2:start": "node scripts/remote-helper.js pm2-start",
+    "pm2:stop": "node scripts/remote-helper.js pm2-stop",
+    "pm2:restart": "node scripts/remote-helper.js pm2-restart",
+    "pm2:status": "node scripts/remote-helper.js pm2-status",
+    "pm2:logs": "node scripts/remote-helper.js pm2-logs",
+    "cleanup-models": "node scripts/cleanup-models.js",
+    "cleanup-models:delete": "node scripts/cleanup-models.js --delete"
+  },
+  "dependencies": {
+    "eventsource-parser": "^1.1.2",
+    "execa": "^8.0.1",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1",
+    "nodemon": "^3.1.11",
+    "undici": "^6.6.1",
+    "ws": "^8.16.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

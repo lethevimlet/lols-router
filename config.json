@@ -1,0 +1,54 @@
+{
+  "server": {
+    "port": 3000,
+    "host": "0.0.0.0"
+  },
+  "logging": {
+    "enabled": false,
+    "debug": false,
+    "colorOutput": true
+  },
+  "systemMetrics": {
+    "enabled": true,
+    "updateInterval": 2000
+  },
+  "cleanup": {
+    "enabled": true,
+    "killOrphanedProcesses": true
+  },
+  "router": {
+    "enabled": true,
+    "model": "qwen2.5-0.5b-instruct",
+    "port": 3001
+  },
+  "gpu": {
+    "enableMonitoring": true,
+    "showProcessDetails": true
+  },
+  "webapp": {
+    "enabled": true,
+    "defaultTimeout": 180,
+    "defaultMaxTokens": 8000,
+    "streamingEnabled": true
+  },
+  "systemPrompt": {
+    "ignoreRoleSystem": false
+  },
+  "llama": {
+    "bin": "~/llama.cpp/build/bin/llama-server",
+    "cache": "~/.cache/llama.cpp",
+    "gpu": {
+      "enabled": true,
+      "layers": -1,
+      "device": 0
+    }
+  },
+  "whisper": {
+    "bin": "~/whisper.cpp/build/bin/whisper-server",
+    "models": "~/whisper.cpp/models",
+    "gpu": {
+      "enabled": true,
+      "device": 0
+    }
+  }
+}

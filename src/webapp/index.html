@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>😂 lols-router (test interface)</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-top">
+        <h1><span class="logo-emoji">😂</span> <span class="logo-text">lols</span>-router <span class="interface-text">(test interface)</span></h1>
+        <div class="status-container">
+          <div class="status">
+            <span class="status-label">Current Model:</span>
+            <span id="currentModel" class="model-name">Loading...</span>
+            <span id="wsStatus" class="ws-status disconnected">●</span>
+          </div>
+          <div class="status">
+            <span class="status-label">Category:</span>
+            <span id="currentCategory" class="category-name">-</span>
+          </div>
+          <div class="button-row">
+            <button id="loggingToggleBtn" class="btn btn-secondary btn-small" title="Toggle API request logging">
+              📋 Logging: <span id="loggingState">...</span>
+            </button>
+            <button id="killModelsBtn" class="btn btn-danger btn-small" title="Kill all running models (except router)">
+              🗑️ Kill Models
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="metrics-container">
+        <!-- VRAM Bar -->
+        <div class="metric-item">
+          <div class="metric-header">
+            <span class="metric-label">
+              <span id="gpuName" class="gpu-name">GPU</span>
+              <span id="gpuTemp" class="gpu-temp">--°C</span>
+            </span>
+            <span id="vramText" class="metric-value">- MB / - MB</span>
+          </div>
+          <div class="metric-bar">
+            <div id="vramBar" class="metric-bar-fill">
+              <div id="vramSegments" class="vram-segments"></div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- CPU Bar -->
+        <div class="metric-item">
+          <div class="metric-header">
+            <span class="metric-label">CPU</span>
+            <span id="cpuText" class="metric-value">-%</span>
+          </div>
+          <div class="metric-bar">
+            <div id="cpuBar" class="metric-bar-fill"></div>
+          </div>
+        </div>
+        
+        <!-- RAM Bar -->
+        <div class="metric-item">
+          <div class="metric-header">
+            <span class="metric-label">RAM</span>
+            <span id="ramText" class="metric-value">- MB / - MB</span>
+          </div>
+          <div class="metric-bar">
+            <div id="ramBar" class="metric-bar-fill"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Model Configuration Info -->
+    <div class="model-info-container">
+      <div class="model-info-header">
+        <h3>Model Configuration</h3>
+        <button id="toggleModelInfo" class="btn btn-secondary btn-small">Show Details</button>
+      </div>
+      <div id="modelInfoContent" class="model-info-content" style="display: none;">
+        <div class="info-row">
+          <span class="info-label">Context Size:</span>
+          <span id="contextSize" class="info-value">-</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Max Tokens:</span>
+          <span id="maxTokensDisplay" class="info-value">-</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Timeout:</span>
+          <span id="timeoutDisplay" class="info-value">-</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">System Prompt:</span>
+          <button id="copyPromptBtn" class="btn btn-secondary btn-small" style="margin-left: 8px;" title="Copy to clipboard">📋 Copy</button>
+        </div>
+        <div class="system-prompt-box">
+          <pre id="systemPrompt" class="system-prompt-text">No system prompt configured</pre>
+        </div>
+      </div>
+    </div>
+
+    <main>
+      <div class="test-panel">
+        <h2>Test Request</h2>
+        
+        <div class="form-group">
+          <label for="modelSelect">Select Model:</label>
+          <select id="modelSelect">
+            <option value="lols-smart">lols-smart (intelligent routing)</option>
+            <option value="qwen2.5-7b-instruct">qwen2.5-7b-instruct</option>
+            <option value="qwen2.5-1.5b-instruct">qwen2.5-1.5b-instruct</option>
+            <option value="custom-endpoint">custom-endpoint (remote)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="messageInput">Test Message:</label>
+          <textarea 
+            id="messageInput" 
+            rows="3" 
+            placeholder="Enter your test message..."
+          >Hello! Can you help me?</textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="imageInput">Upload Image (for vision models):</label>
+          <div class="image-upload-container">
+            <input 
+              type="file" 
+              id="imageInput" 
+              accept="image/*"
+              class="image-input"
+            >
+            <button id="clearImageBtn" class="btn btn-secondary" style="display: none;">Clear Image</button>
+          </div>
+          <div id="imagePreview" class="image-preview"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="audioInput">Upload Audio (for transcription):</label>
+          <div class="audio-upload-container">
+            <input 
+              type="file" 
+              id="audioInput" 
+              accept="audio/*"
+              class="audio-input"
+            >
+            <button id="clearAudioBtn" class="btn btn-secondary" style="display: none;">Clear Audio</button>
+            <button id="testTranscribeBtn" class="btn btn-primary" style="display: none; margin-left: 8px;">Transcribe</button>
+          </div>
+          <div id="audioPreview" class="audio-preview"></div>
+        </div>
+
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="maxTokensCheckbox" checked>
+            Limit Max Tokens
+          </label>
+          <input 
+            type="number" 
+            id="maxTokensInput" 
+            min="1" 
+            max="32000" 
+            value="2000"
+            placeholder="2000"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="timeoutInput">Request Timeout (seconds):</label>
+          <input 
+            type="number" 
+            id="timeoutInput" 
+            min="1" 
+            max="600" 
+            value="60"
+            placeholder="60"
+            title="Server-side timeout for response generation. Client adds extra time for model loading."
+          >
+        </div>
+
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="streamCheckbox" checked>
+            Stream response
+          </label>
+        </div>
+
+        <div class="button-group">
+          <button id="sendBtn" class="btn btn-primary">Send Test Request</button>
+          <button id="clearBtn" class="btn btn-secondary">Clear Output</button>
+        </div>
+      </div>
+
+      <div class="output-panel">
+        <div class="output-header">
+          <h2>Output</h2>
+          <span id="tokensPerSec" class="tokens-per-sec"></span>
+        </div>
+        <div id="output" class="output-content"></div>
+      </div>
+    </main>
+
+    <footer>
+      <p>lols-router v1.0 | OpenAI-compatible API router</p>
+    </footer>
+  </div>
+
+  <script src="/script.js?v=20260210-4"></script>
+</body>
+</html>

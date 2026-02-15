@@ -208,14 +208,21 @@ router.post("/v1/chat/completions", async (req, res) => {
         "connection": "keep-alive"
       });
 
+      let streamConverter = null;
+      if (anthropicFormat) {
+        const { AnthropicStreamConverter } = require("../helpers/anthropic-converter");
+        streamConverter = new AnthropicStreamConverter();
+        log("created Anthropic stream converter");
+      }
+
       const reader = upstream.body.getReader();
       for (;;) {
         const { done, value } = await reader.read();
         if (done) break;
         
-        if (anthropicFormat) {
+        if (streamConverter) {
           // Convert OpenAI SSE chunks to Anthropic format
-          const converted = convertOpenAIStreamToAnthropic(value);
+          const converted = streamConverter.convert(value);
           if (converted) {
             res.write(Buffer.from(converted));
           }

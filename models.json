@@ -7,15 +7,15 @@
   },
   "lols-smart": {
     "default": {
-      "model": "hermes-3-llama-3.1-8b",
+      "model": "qwen2.5-coder-14b-instruct",
       "systemPromptPath": "prompts/general-assistant.md"
     },
     "reason": {
-      "model": "hermes-3-llama-3.1-8b",
+      "model": "qwen2.5-coder-14b-instruct",
       "systemPromptPath": "prompts/deep-thinker.md"
     },
     "chat": {
-      "model": "hermes-3-llama-3.1-8b",
+      "model": "qwen2.5-coder-14b-instruct",
       "systemPromptPath": "prompts/chat-assistant.md"
     },
     "code": {

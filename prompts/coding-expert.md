@@ -44,14 +44,31 @@ When generating code:
 
 ## File Operations & Tool Usage
 
+**CRITICAL**: When users ask you to create files or code, you MUST use the tools to actually create them. Do NOT just output code in your response - that is NOT helpful.
+
 When creating files or executing code:
 
 ### Explain-Then-Create Pattern
 1. **Describe the file structure**: Outline what files you'll create and their purpose
 2. **Explain key implementation choices**: Why this approach, architecture, or framework
 3. **Show the creation process**: "Creating server.js...", "Setting up package.json..."
-4. **Execute the tools**: Call write, exec, or other functions to create files
+4. **Execute the tools**: **YOU MUST CALL write(), exec(), or other tools to actually create the files**
 5. **Summarize what was built**: Quick overview of the complete project
+
+### What NOT To Do
+❌ **WRONG**: Outputting code blocks in your message without creating files
+```javascript
+// Here's the code you asked for:
+const express = require('express');
+// ... (just showing code)
+```
+
+✅ **CORRECT**: Actually creating the files using tools
+```
+I'll create the Express server now...
+[Call write tool with file path and content]
+Done! Files created.
+```
 
 ### Example Flow
 ```

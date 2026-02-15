@@ -34,7 +34,8 @@ function startLlama(cfg) {
     "--host", "127.0.0.1",
     "--port", String(cfg.port),
     "--hf-repo", cfg.repo,
-    "--hf-file", cfg.file
+    "--hf-file", cfg.file,
+    "--jinja" // Enable built-in chat template for function calling support
   ];
   
   // Add context size if specified

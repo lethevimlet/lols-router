@@ -811,6 +811,25 @@ const commands = {
     }
   },
   
+  'pm2-save': (config) => {
+    console.log('💾 Saving PM2 process list...\n');
+    const { projectPath } = config.remote;
+    
+    const cmd = buildSSHCommand(
+      config,
+      `cd ${projectPath} && pm2 save`
+    );
+    
+    try {
+      execSync(cmd, { stdio: 'inherit' });
+      console.log('\n✅ PM2 process list saved');
+      console.log('\n⚠️  Note: Auto-startup on boot requires manual setup');
+      console.log('See docs/PM2-STARTUP.md for instructions');
+    } catch (err) {
+      console.error('\n❌ Failed to save PM2 process list');
+    }
+  },
+  
   'pm2-monit': (config) => {
     console.log('📊 Opening PM2 monitor (Ctrl+C to exit)...\n');
     const { projectPath } = config.remote;

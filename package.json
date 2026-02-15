@@ -24,6 +24,8 @@
     "pm2:restart": "node scripts/remote-helper.js pm2-restart",
     "pm2:status": "node scripts/remote-helper.js pm2-status",
     "pm2:logs": "node scripts/remote-helper.js pm2-logs",
+    "pm2:save": "node scripts/remote-helper.js pm2-save",
+    "setup-startup": "node scripts/setup-startup.js",
     "cleanup-models": "node scripts/cleanup-models.js",
     "cleanup-models:delete": "node scripts/cleanup-models.js --delete"
   },

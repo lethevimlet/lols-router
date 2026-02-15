@@ -77,7 +77,7 @@
     "glm-4.7-flash": {
       "type": "llama-cpp",
       "repo": "unsloth/GLM-4.7-Flash-GGUF",
-      "file": "GLM-4.7-Flash-Q3_K_M.gguf",
+      "file": "GLM-4.7-Flash-Q4_K_M.gguf",
       "context": 131072,
       "port": 8027,
       "timeout": 300,
@@ -93,8 +93,8 @@
         "threads": 12,
         "parallel": 1,
         "contBatching": true,
-        "cacheTypeK": "q4_0",
-        "cacheTypeV": "q4_0",
+        "cacheTypeK": "q8_0",
+        "cacheTypeV": "q8_0",
         "gpuLayers": -1
       }
     },

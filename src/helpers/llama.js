@@ -57,6 +57,27 @@ function startLlama(cfg) {
   args.push("--cache-ram", "16384"); // 16GB cache (more = better hit rate)
   console.log("[llama] Prompt cache size:", "16GB");
   
+  // Sampling parameters (model-specific defaults)
+  if (cfg.temperature !== undefined) {
+    args.push("--temp", String(cfg.temperature));
+    console.log("[llama] Temperature:", cfg.temperature);
+  }
+  
+  if (cfg.topP !== undefined) {
+    args.push("--top-p", String(cfg.topP));
+    console.log("[llama] Top-p:", cfg.topP);
+  }
+  
+  if (cfg.minP !== undefined) {
+    args.push("--min-p", String(cfg.minP));
+    console.log("[llama] Min-p:", cfg.minP);
+  }
+  
+  if (cfg.repeatPenalty !== undefined) {
+    args.push("--repeat-penalty", String(cfg.repeatPenalty));
+    console.log("[llama] Repeat penalty:", cfg.repeatPenalty);
+  }
+  
   // Add mmproj for vision models (use cached file path)
   if (cfg.mmproj) {
     const cacheDir = getLlamaCache();

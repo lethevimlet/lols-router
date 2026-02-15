@@ -76,6 +76,14 @@ function convertOpenAIToAnthropic(openaiResponse) {
     }
   }
 
+  // Ensure content array is not empty (Anthropic requires at least one block)
+  if (content.length === 0) {
+    content.push({
+      type: "text",
+      text: message.content || ""
+    });
+  }
+
   // Map finish_reason to stop_reason
   const finishReasonMap = {
     "stop": "end_turn",

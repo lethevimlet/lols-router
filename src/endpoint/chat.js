@@ -248,8 +248,16 @@ router.post("/v1/chat/completions", async (req, res) => {
     
     if (anthropicFormat) {
       log("converting response to Anthropic format");
-      const converted = convertOpenAIToAnthropic(responseData);
-      res.json(converted);
+      try {
+        const converted = convertOpenAIToAnthropic(responseData);
+        log("conversion successful, content blocks:", converted.content.length);
+        res.json(converted);
+      } catch (convErr) {
+        log("CONVERSION ERROR:", convErr.message);
+        log("Original response:", JSON.stringify(responseData).slice(0, 500));
+        // Fall back to original response
+        res.json(responseData);
+      }
     } else {
       res.json(responseData);
     }

@@ -6,6 +6,7 @@ const config = require("../helpers/config");
 const { resolveSystemPrompt } = config;
 const { fetch } = require("undici");
 const { truncateContext } = require("../helpers/context-truncate");
+const { convertOpenAIToAnthropic, convertOpenAIStreamToAnthropic } = require("../helpers/anthropic-converter");
 
 const router = express.Router();
 
@@ -196,6 +197,9 @@ router.post("/v1/chat/completions", async (req, res) => {
 
     log("upstream status:", upstream.status, upstream.statusText);
 
+    const anthropicFormat = plan.config?.anthropicFormat || false;
+    log("anthropic format conversion:", anthropicFormat ? "enabled" : "disabled");
+
     if (payload.stream) {
       log("streaming response");
       res.writeHead(200, {
@@ -208,7 +212,16 @@ router.post("/v1/chat/completions", async (req, res) => {
       for (;;) {
         const { done, value } = await reader.read();
         if (done) break;
-        res.write(Buffer.from(value));
+        
+        if (anthropicFormat) {
+          // Convert OpenAI SSE chunks to Anthropic format
+          const converted = convertOpenAIStreamToAnthropic(value);
+          if (converted) {
+            res.write(Buffer.from(converted));
+          }
+        } else {
+          res.write(Buffer.from(value));
+        }
       }
 
       clearTimeout(timer);
@@ -231,7 +244,15 @@ router.post("/v1/chat/completions", async (req, res) => {
     }
 
     log("returning json");
-    res.json(JSON.parse(text));
+    const responseData = JSON.parse(text);
+    
+    if (anthropicFormat) {
+      log("converting response to Anthropic format");
+      const converted = convertOpenAIToAnthropic(responseData);
+      res.json(converted);
+    } else {
+      res.json(responseData);
+    }
   } catch (err) {
     log("ERROR:", err && err.stack ? err.stack : String(err));
     if (!res.headersSent) {

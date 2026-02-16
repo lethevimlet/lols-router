@@ -65,7 +65,7 @@
       "port": 8026,
       "timeout": 300,
       "maxTokens": 8192,
-      "keepWarm": false,
+      "keepWarm": 300,
       "performance": {
         "flashAttention": true,
         "batch": 4096,
@@ -86,7 +86,7 @@
       "port": 8027,
       "timeout": 300,
       "maxTokens": 8192,
-      "keepWarm": false,
+      "keepWarm": 300,
       "temperature": 0.7,
       "topP": 1.0,
       "minP": 0.01,
@@ -111,7 +111,7 @@
       "port": 8033,
       "timeout": 300,
       "maxTokens": 8192,
-      "keepWarm": false,
+      "keepWarm": 300,
       "temperature": 0.7,
       "topP": 0.95,
       "performance": {
@@ -133,7 +133,7 @@
       "mmproj": "mmproj-model-f16.gguf",
       "context": 8192,
       "port": 8024,
-      "keepWarm": false,
+      "keepWarm": 300,
       "supportsVision": true
     },
     "whisper-small": {
@@ -141,7 +141,7 @@
       "repo": "ggerganov/whisper.cpp",
       "file": "ggml-small.bin",
       "port": 8030,
-      "keepWarm": false,
+      "keepWarm": 300,
       "language": "auto"
     },
     "whisper-base": {
@@ -149,7 +149,7 @@
       "repo": "ggerganov/whisper.cpp",
       "file": "ggml-base.bin",
       "port": 8031,
-      "keepWarm": false,
+      "keepWarm": 300,
       "language": "auto"
     },
     "whisper-medium": {
@@ -157,7 +157,7 @@
       "repo": "ggerganov/whisper.cpp",
       "file": "ggml-medium.bin",
       "port": 8032,
-      "keepWarm": false,
+      "keepWarm": 300,
       "language": "auto"
     }
   }

@@ -138,7 +138,7 @@ This allows compatibility with clients that expect auth (like OpenClaw) while ke
 
 ### Context Handling (OPTIMIZED 2026-02-14)
 
-**Breaking Change:** Flash attention disabled, f16 KV cache for reliability.
+**Current Configuration:** Flash attention enabled, q4_0 KV cache for memory efficiency.
 
 The 7B model now handles up to **128K tokens** successfully:
 - 2K tokens: 0.64s (~3,125 t/s) ⚡
@@ -147,8 +147,8 @@ The 7B model now handles up to **128K tokens** successfully:
 - 128K tokens: 69.86s (~1,832 t/s) ✅
 
 **Key optimizations applied:**
-- `flashAttention: false` (was causing hangs on generation)
-- `cacheTypeK/V: "f16"` (was q4_0, better quality)
+- `flashAttention: true` (enabled for performance)
+- `cacheTypeK/V: "q4_0"` (quantized for memory efficiency)
 - `--override-kv` in llama.cpp (forces full context in slots)
 - Smaller batch sizes: batch=4096, ubatch=512
 - Single slot: parallel=1, contBatching=false

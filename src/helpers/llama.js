@@ -47,6 +47,12 @@ function startLlama(cfg) {
     console.log("[llama] Using built-in chat template (jinja)");
   }
   
+  // Enable function calling parsing if configured
+  if (cfg.functionCalling !== false) {
+    args.push("-fa");
+    console.log("[llama] Function calling enabled (-fa)");
+  }
+  
   // Add context size if specified
   if (cfg.context) {
     args.push("-c", String(cfg.context));

@@ -14,6 +14,7 @@ const modelsConfig = loadModels();
 const models = modelsConfig.models || modelsConfig["llama-models"] || {};
 
 let current = null;
+let keepWarmTimer = null;
 
 /* Simple mutex */
 let locked = false;
@@ -48,6 +49,66 @@ async function isLlamaOnPort(port) {
     return r.ok;
   } catch {
     return false;
+  }
+}
+
+/**
+ * Send a keep-warm ping to the model
+ */
+async function sendKeepWarmPing(port, modelName) {
+  try {
+    const response = await fetch(`http://127.0.0.1:${port}/v1/chat/completions`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        messages: [{ role: "user", content: "ping" }],
+        max_tokens: 1,
+        stream: false
+      }),
+      signal: AbortSignal.timeout(10000)
+    });
+    
+    if (response.ok) {
+      log.debug(`keep-warm ping successful for ${modelName}`);
+      return true;
+    } else {
+      log.warn(`keep-warm ping failed for ${modelName}: HTTP ${response.status}`);
+      return false;
+    }
+  } catch (error) {
+    log.warn(`keep-warm ping error for ${modelName}:`, error.message);
+    return false;
+  }
+}
+
+/**
+ * Start keep-warm timer for a model
+ */
+function startKeepWarm(modelName, modelConfig, port) {
+  // Clear any existing timer
+  stopKeepWarm();
+  
+  const keepWarmSeconds = modelConfig.keepWarm;
+  if (!keepWarmSeconds || keepWarmSeconds === false) {
+    return;
+  }
+  
+  const intervalMs = keepWarmSeconds * 1000;
+  log.info(`starting keep-warm for ${modelName} (every ${keepWarmSeconds}s)`);
+  
+  keepWarmTimer = setInterval(() => {
+    sendKeepWarmPing(port, modelName);
+  }, intervalMs);
+}
+
+/**
+ * Stop keep-warm timer
+ */
+function stopKeepWarm() {
+  if (keepWarmTimer) {
+    clearInterval(keepWarmTimer);
+    keepWarmTimer = null;
+    log.debug("keep-warm timer stopped");
   }
 }
 
@@ -86,6 +147,10 @@ async function ensureModel(modelName, modelConfig) {
 
   // Check if already running the same model
   if (current && current.name === modelName && current.type !== "remote") {
+    // Model already loaded, ensure keep-warm is running if configured
+    if (model.keepWarm && !keepWarmTimer) {
+      startKeepWarm(modelName, model, model.port);
+    }
     return;
   }
 
@@ -93,6 +158,9 @@ async function ensureModel(modelName, modelConfig) {
   if (current && current.owned && current.proc) {
     const stopType = current.type === "whisper-cpp" ? "whisper" : "llama";
     log.log(`stopping owned ${stopType}:`, current.name);
+    
+    // Stop keep-warm timer when switching models
+    stopKeepWarm();
     
     const stopFn = current.type === "whisper-cpp" ? stopWhisper : stopLlama;
     await withTimeout(stopFn(current.proc), 30000, `stop${stopType}`);
@@ -109,8 +177,14 @@ async function ensureModel(modelName, modelConfig) {
       type: modelType,
       port: model.port,
       owned: false,
-      proc: null
+      proc: null,
+      config: model
     };
+    
+    // Start keep-warm timer if configured
+    if (model.keepWarm) {
+      startKeepWarm(modelName, model, model.port);
+    }
     
     // Broadcast model change
     if (global.broadcastModelStatus) {
@@ -190,6 +264,11 @@ async function ensureModel(modelName, modelConfig) {
   }
 
   log.success("ready:", modelName, "port", model.port);
+  
+  // Start keep-warm timer if configured
+  if (model.keepWarm) {
+    startKeepWarm(modelName, model, model.port);
+  }
   
   // Broadcast model change
   if (global.broadcastModelStatus) {

@@ -8,8 +8,8 @@ const SERVER_URL = process.env.SERVER_URL || 'http://localhost:3000';
 const INTERVAL_MS = parseInt(process.env.INTERVAL_MS) || 5 * 60 * 1000; // 5 minutes default
 
 const MODELS_TO_WARM = [
-  'qwen2.5.1-coder-7b-instruct',  // Primary coding model
-  'lols-smart'                     // Router-based model
+  'qwen3-coder-30b-instruct',      // Primary 30B coding model
+  'lols-smart'                     // Router-based model (routes to 30B)
 ];
 
 async function pingModel(model) {

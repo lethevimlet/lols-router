@@ -106,7 +106,6 @@
       "port": 8033,
       "timeout": 300,
       "maxTokens": 8192,
-      "functionCalling": true,
       "temperature": 0.7,
       "topP": 0.95,
       "performance": {

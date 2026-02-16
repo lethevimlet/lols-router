@@ -37,21 +37,8 @@ function startLlama(cfg) {
     "--hf-file", cfg.file
   ];
   
-  // Use explicit chat format if specified (e.g., "deepseek-v3", "chatml-function-calling")
-  // Otherwise fall back to --jinja for built-in chat template
-  if (cfg.chatFormat) {
-    args.push("--chat-format", cfg.chatFormat);
-    console.log("[llama] Chat format:", cfg.chatFormat);
-  } else {
-    args.push("--jinja");
-    console.log("[llama] Using built-in chat template (jinja)");
-  }
-  
-  // Enable function calling parsing if configured
-  if (cfg.functionCalling !== false) {
-    args.push("-fa");
-    console.log("[llama] Function calling enabled (-fa)");
-  }
+  args.push("--jinja");
+  console.log("[llama] Using built-in chat template (jinja)");
   
   // Add context size if specified
   if (cfg.context) {

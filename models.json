@@ -35,10 +35,10 @@
       "context": 32768,
       "port": 8025
     },
-    "hermes-3-llama-3.1-8b": {
+    "qwen3-coder-30b-instruct": {
       "type": "llama-cpp",
-      "repo": "bartowski/Hermes-3-Llama-3.1-8B-GGUF",
-      "file": "Hermes-3-Llama-3.1-8B-Q4_K_M.gguf",
+      "repo": "bartowski/Qwen3-Coder-30B-A3B-Instruct-GGUF",
+      "file": "Qwen3-Coder-30B-A3B-Instruct-Q4_K_M.gguf",
       "context": 32768,
       "port": 8029,
       "timeout": 300,
@@ -46,12 +46,13 @@
       "performance": {
         "flashAttention": true,
         "batch": 4096,
-        "ubatch": 1024,
+        "ubatch": 512,
         "threads": 12,
         "parallel": 1,
         "contBatching": true,
         "cacheTypeK": "q4_0",
-        "cacheTypeV": "q4_0"
+        "cacheTypeV": "q4_0",
+        "gpuLayers": 20
       }
     },
     "qwen2.5-coder-14b-instruct": {

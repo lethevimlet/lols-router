@@ -133,7 +133,7 @@
       "mmproj": "mmproj-model-f16.gguf",
       "context": 8192,
       "port": 8024,
-      "keepWarm": 300,
+      "keepWarm": false,
       "supportsVision": true
     },
     "whisper-small": {
@@ -141,7 +141,7 @@
       "repo": "ggerganov/whisper.cpp",
       "file": "ggml-small.bin",
       "port": 8030,
-      "keepWarm": 300,
+      "keepWarm": false,
       "language": "auto"
     },
     "whisper-base": {
@@ -149,7 +149,7 @@
       "repo": "ggerganov/whisper.cpp",
       "file": "ggml-base.bin",
       "port": 8031,
-      "keepWarm": 300,
+      "keepWarm": false,
       "language": "auto"
     },
     "whisper-medium": {
@@ -157,7 +157,7 @@
       "repo": "ggerganov/whisper.cpp",
       "file": "ggml-medium.bin",
       "port": 8032,
-      "keepWarm": 300,
+      "keepWarm": false,
       "language": "auto"
     }
   }
